@@ -3,6 +3,7 @@ package com.project.fitforge.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -18,13 +19,14 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long activityId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId" , nullable = false , foreignKey = @ForeignKey(name = "fk_activity_user"))
+    @JoinColumn(name = "user_id", nullable = false,foreignKey = @ForeignKey(name = "fk_activity_user"))
     @JsonIgnore
     private User user;
     private ActivityType type;
