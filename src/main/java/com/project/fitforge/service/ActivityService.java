@@ -7,7 +7,11 @@ import com.project.fitforge.model.User;
 import com.project.fitforge.repository.ActivityRepository;
 import com.project.fitforge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +46,15 @@ public class ActivityService {
         activityResponse.setUpdatedAt(savedActivity.getUpdatedAt());
 
         return activityResponse;
+    }
+
+
+    public List<ActivityResponse> getUserActivities(Long userId) {
+
+        List<Activity> activityList = activityRepository.findByUser_UserId(userId);
+
+        return activityList.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 }

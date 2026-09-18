@@ -6,10 +6,7 @@ import com.project.fitforge.model.Activity;
 import com.project.fitforge.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +22,12 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.trackActivity(activityRequest));
     }
 
-    public ResponseEntity<List<ActivityResponse>> getAllActivities(){
-        return null;
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<ActivityResponse>> getUserActivities(
+            @PathVariable Long userId) {
+
+        return ResponseEntity.ok(
+                activityService.getUserActivities(userId)
+        );
     }
 }
