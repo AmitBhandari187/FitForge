@@ -3,8 +3,10 @@ package com.project.fitforge.service;
 import com.project.fitforge.dto.RegisterRequest;
 import com.project.fitforge.dto.UserResponse;
 import com.project.fitforge.model.User;
+import com.project.fitforge.model.UserRole;
 import com.project.fitforge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,13 +14,16 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponse register(RegisterRequest registerRequest) {
+        UserRole role = registerRequest.getRole() !=null ? registerRequest.getRole():UserRole.USER;
         User user=User.builder()
                 .email(registerRequest.getEmail())
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
-                .password(registerRequest.getPassword())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .role(role)
                 .build();
 
         User savedUser= userRepository.save(user);
@@ -26,7 +31,7 @@ public class UserService {
 
     }
 
-    private UserResponse mapToResponse(User savedUser) {
+    public UserResponse mapToResponse(User savedUser) {
         UserResponse userResponse=new UserResponse();
         userResponse.setUserId(savedUser.getUserId());
         userResponse.setEmail(savedUser.getEmail());
