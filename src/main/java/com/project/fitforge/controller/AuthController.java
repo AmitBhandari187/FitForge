@@ -37,13 +37,7 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
         Authentication authentication;
         try {
-            //Get the user
-            User user=userRepository.findByEmail(loginRequest.getEmail());
-            if (user==null) return ResponseEntity.status(401).build();
-            //Validate password
-            if (!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword())){
-                return ResponseEntity.status(401).build();
-            };  // Uses to match raw pass and encoded pass from db
+            User user=userService.authenticate(loginRequest);
             // Generate token
             String token=jwtUtils.generateToken(user.getUserId(),user.getRole().name());
 

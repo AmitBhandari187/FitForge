@@ -1,11 +1,13 @@
 package com.project.fitforge.service;
 
+import com.project.fitforge.dto.LoginRequest;
 import com.project.fitforge.dto.RegisterRequest;
 import com.project.fitforge.dto.UserResponse;
 import com.project.fitforge.model.User;
 import com.project.fitforge.model.UserRole;
 import com.project.fitforge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +44,17 @@ public class UserService {
         userResponse.setUpdatedAt(savedUser.getUpdatedAt());
 
         return userResponse;
+    }
+
+    public User authenticate(LoginRequest loginRequest) {
+        //Get the user
+        User user=userRepository.findByEmail(loginRequest.getEmail());
+        if (user==null)
+            throw new RuntimeException("Invalid Credentials");
+        //Validate password
+        if (!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword())){
+            throw new RuntimeException("Invalid Credentials");
+        };  // Uses to match raw pass and encoded pass from db
+        return user;
     }
 }
