@@ -8,6 +8,7 @@ import com.project.fitforge.model.User;
 import com.project.fitforge.repository.UserRepository;
 import com.project.fitforge.security.JwtUtils;
 import com.project.fitforge.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,7 +30,7 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("register")
-    private ResponseEntity<UserResponse> registerUser(@RequestBody RegisterRequest registerRequest){
+    private ResponseEntity<UserResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest){
         return ResponseEntity.ok(userService.register(registerRequest));
     }
 
